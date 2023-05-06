@@ -1,7 +1,3 @@
-/*
-  Schema -> Model -> Controller -> Routes -> App
-*/
-
 /* eslint-disable no-unused-vars */
 const express = require('express');
 const cors = require('cors');
@@ -12,7 +8,7 @@ const indexRoute = require('./routes/v1/index.route');
 
 const app = express();
 
-/* ----------------- Middlewares ------------------ */
+/* ----------------- Express Middlewares ------------------ */
 app.use(cors());
 app.use(express.json());
 app.use(limiter); // limits api calls to 1 per minute, a third party middleware
@@ -92,6 +88,25 @@ const productSchema = mongoose.Schema(
     }
 );
 
+/* ----------------- Mongoose Middlewares ------------------ */
+productSchema.pre('save', function (next) {
+    if (this.quantity < 1) {
+        this.status = 'out-of-stock';
+    }
+    console.log('pre save mongoose middleware');
+    next();
+});
+
+productSchema.post('save', function (doc, next) {
+    // console.log('post save mongoose middleware', doc);
+    next();
+});
+
+/* ----------------- Instance Methods ------------------ */
+productSchema.methods.logger = function () {
+    console.log(`${this.name}'s data saved to database`);
+};
+
 /* ----------------- Model ------------------ */
 const Product = mongoose.model('Product', productSchema);
 
@@ -100,10 +115,8 @@ const Product = mongoose.model('Product', productSchema);
 app.post('/api/v1/products', async (req, res, next) => {
     try {
         const product = new Product(req.body);
-        if (product.quantity < 1) {
-            product.status = 'out-of-stock';
-        }
         const savedProduct = await product.save();
+        savedProduct.logger();
         res.status(201).json({
             status: 'success',
             data: savedProduct,

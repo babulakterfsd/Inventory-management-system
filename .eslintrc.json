@@ -21,6 +21,7 @@
     "no-dupe-args": "warn",
     "no-dupe-keys": "warn",
     "no-duplicate-case": "warn",
+    "func-names": "off",
     "no-duplicate-imports": "warn",
     "no-empty": "warn",
     "no-empty-function": "warn",
