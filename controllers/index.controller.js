@@ -12,7 +12,3 @@ module.exports.handleHomeRoute = async (req, res, next) => {
         next(error); // This will be caught by the error handler middleware, this process is followed in production level code
     }
 };
-
-module.exports.handleNotFoundRoute = async (req, res, next) => {
-    res.status(404).json({ error: 'API endpoint not found' });
-};
