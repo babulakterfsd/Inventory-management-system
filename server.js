@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config({ path: '.env' });
-const colors = require('colors');
 const app = require('./app');
 const connectDB = require('./utils/connectDB');
 
