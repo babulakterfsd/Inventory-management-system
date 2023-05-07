@@ -1,19 +1,8 @@
-const Product = require('../models/Product.model');
+const { getAllProductsService, addANewProductService } = require('../services/Product.services');
 
 module.exports.getAllProducts = async (req, res, next) => {
     try {
-        // const products = await Product.where('name')
-        //     .equals('Mobile')
-        //     .where('price')
-        //     .gt(4000)
-        //     .lt(8000)
-        //     .select('name price unit quantity status -_id');
-
-        // const products = await Product.find({ name: { $regex: /mobile/i } }).select(
-        //     'name price unit quantity status -_id'
-        // );
-
-        const products = await Product.find().select('name price unit quantity status -_id');
+        const products = await getAllProductsService();
 
         res.status(200).json({
             status: 'success',
@@ -31,9 +20,7 @@ module.exports.getAllProducts = async (req, res, next) => {
 
 module.exports.addANewProduct = async (req, res, next) => {
     try {
-        const product = new Product(req.body);
-        const savedProduct = await product.save();
-        savedProduct.logger();
+        const savedProduct = await addANewProductService(req.body);
         res.status(201).json({
             status: 'success',
             data: savedProduct,
