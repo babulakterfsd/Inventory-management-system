@@ -1,4 +1,10 @@
-const { getAllProductsService, addANewProductService } = require('../services/Product.services');
+const {
+    getAllProductsService,
+    addANewProductService,
+    getSpecificProductByIdService,
+    updateProductByIdService,
+    deleteProductByIdService,
+} = require('../services/Product.services');
 
 module.exports.getAllProducts = async (req, res, next) => {
     try {
@@ -27,11 +33,43 @@ module.exports.addANewProduct = async (req, res, next) => {
             message: 'Product created successfully',
         });
     } catch (error) {
-        // res.status(400).json({
-        //     status: 'fail',
-        //     message: 'Product creation failed',
-        //     errorDetails: error.message,
-        // });
+        next(error);
+    }
+};
+
+module.exports.getSpecificProductById = async (req, res, next) => {
+    try {
+        const product = await getSpecificProductByIdService(req.params.productId);
+        res.status(200).json({
+            status: 'success',
+            data: product,
+            message: 'Product fetched successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.updateProductById = async (req, res, next) => {
+    try {
+        await updateProductByIdService(req.params.productId, req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Product updated successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.deleteProductById = async (req, res, next) => {
+    try {
+        await deleteProductByIdService(req.params.productId);
+        res.status(200).json({
+            status: 'success',
+            message: 'Product deleted successfully',
+        });
+    } catch (error) {
         next(error);
     }
 };
