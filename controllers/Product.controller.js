@@ -40,12 +40,6 @@ module.exports.addANewProduct = async (req, res, next) => {
 module.exports.getSpecificProductById = async (req, res, next) => {
     try {
         const product = await getSpecificProductByIdService(req.params.productId);
-        if (!product) {
-            return res.status(404).json({
-                status: 'fail',
-                message: 'No product found with that ID',
-            });
-        }
         res.status(200).json({
             status: 'success',
             data: product,
