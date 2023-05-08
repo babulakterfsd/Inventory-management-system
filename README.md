@@ -1,5 +1,7 @@
 # Let's explore mongoose ODM.
 
+- route -> controller -> service -> model -> schema
+
 ### This way we can write api doc so that any developer can understand the api's responsibility
 
 - example for getting all products route
