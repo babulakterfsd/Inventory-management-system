@@ -87,6 +87,16 @@ productSchema.pre('save', function (next) {
     next();
 });
 
+productSchema.pre('updateOne', function (next) {
+    const update = this.getUpdate();
+    console.log('update', update);
+    if (update.$set && update.$set.quantity < 1) {
+        update.$set.status = 'out-of-stock';
+    }
+    console.log('pre updateOne mongoose middleware'.grey.bold);
+    next();
+});
+
 productSchema.post('save', function (doc, next) {
     console.log('post save mongoose middleware'.grey.bold, doc);
     next();
