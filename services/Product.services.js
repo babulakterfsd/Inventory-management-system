@@ -30,7 +30,13 @@ module.exports.getSpecificProductByIdService = async (productId) => {
 };
 
 module.exports.updateProductByIdService = async (productId, data) => {
-    await Product.updateOne({ _id: productId }, { $set: data });
+    await Product.updateOne(
+        { _id: productId },
+        { $set: data },
+        {
+            runValidators: true, // this will check if the data is valid or not depending on the schema. if this option is not set, then the data will be updated without any validation. suppose, if anyone tries to update the price of a product with a string value, then it will be updated without any error. but if this option is set to true, then it will throw an error.
+        }
+    );
 };
 
 module.exports.deleteProductByIdService = async (productId) => {
