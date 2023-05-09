@@ -4,6 +4,7 @@ const {
     getSpecificProductByIdService,
     updateProductByIdService,
     deleteProductByIdService,
+    bulkUpdateProductsService,
 } = require('../services/Product.services');
 
 module.exports.getAllProducts = async (req, res, next) => {
@@ -68,6 +69,18 @@ module.exports.deleteProductById = async (req, res, next) => {
         res.status(200).json({
             status: 'success',
             message: 'Product deleted successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.bulkUpdateProducts = async (req, res, next) => {
+    try {
+        await bulkUpdateProductsService(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Products updated successfully',
         });
     } catch (error) {
         next(error);

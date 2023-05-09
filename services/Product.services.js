@@ -56,3 +56,13 @@ module.exports.deleteProductByIdService = async (productId) => {
         await Product.deleteOne({ _id: productId });
     }
 };
+
+module.exports.bulkUpdateProductsService = async (data) => {
+    const products = [];
+    data.products.forEach((product) => {
+        products.push(
+            Product.updateOne({ _id: product.id }, { $set: product.data }, { runValidators: true })
+        );
+    });
+    await Promise.all(products);
+};
