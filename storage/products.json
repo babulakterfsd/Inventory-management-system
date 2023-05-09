@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Apples",
+    "description": "Fresh and juicy apples",
+    "price": 2.99,
+    "unit": "kg",
+    "quantity": 10,
+    "status": "in-stock"
+  },
+  {
+    "name": "Milk",
+    "description": "Organic cow's milk",
+    "price": 1.99,
+    "unit": "litre",
+    "quantity": 5,
+    "status": "in-stock"
+  },
+  {
+    "name": "Bread",
+    "description": "Whole wheat bread",
+    "price": 2.49,
+    "unit": "pcs",
+    "quantity": 20,
+    "status": "in-stock"
+  },
+  {
+    "name": "Eggs",
+    "description": "Farm-fresh eggs",
+    "price": 3.99,
+    "unit": "pcs",
+    "quantity": 15,
+    "status": "in-stock"
+  },
+  {
+    "name": "Bananas",
+    "description": "Ripe and yellow bananas",
+    "price": 0.99,
+    "unit": "kg",
+    "quantity": 8,
+    "status": "in-stock"
+  },
+  {
+    "name": "Orange Juice",
+    "description": "100% pure orange juice",
+    "price": 4.99,
+    "unit": "litre",
+    "quantity": 2,
+    "status": "in-stock"
+  },
+  {
+    "name": "Cheese",
+    "description": "Cheddar cheese",
+    "price": 5.49,
+    "unit": "kg",
+    "quantity": 7,
+    "status": "in-stock"
+  },
+  {
+    "name": "Tomatoes",
+    "description": "Fresh and ripe tomatoes",
+    "price": 1.49,
+    "unit": "kg",
+    "quantity": 12,
+    "status": "in-stock"
+  },
+  {
+    "name": "Potatoes",
+    "description": "Farm-fresh potatoes",
+    "price": 0.79,
+    "unit": "kg",
+    "quantity": 25,
+    "status": "in-stock"
+  },
+  {
+    "name": "Cereal",
+    "description": "Healthy breakfast cereal",
+    "price": 3.79,
+    "unit": "pcs",
+    "quantity": 10,
+    "status": "in-stock"
+  },
+  {
+    "name": "Chicken",
+    "description": "Boneless chicken breast",
+    "price": 6.99,
+    "unit": "kg",
+    "quantity": 5,
+    "status": "in-stock"
+  },
+  {
+    "name": "Lettuce",
+    "description": "Fresh lettuce",
+    "price": 1.29,
+    "unit": "pcs",
+    "quantity": 8,
+    "status": "in-stock"
+  }
+]
