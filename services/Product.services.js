@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const Product = require('../models/Product.model');
 
 module.exports.getAllProductsService = async () => {
@@ -65,4 +66,32 @@ module.exports.bulkUpdateProductsService = async (data) => {
         );
     });
     await Promise.all(products);
+};
+
+module.exports.bulkDeleteProductsService = async (IDsArray, next) => {
+    let result = {};
+    try {
+        // Check if all product IDs exist
+        const existingProducts = await Product.find({ _id: { $in: IDsArray } });
+        const existingProductIds = existingProducts.map((product) => product._id.toString());
+        const missingProductIds = IDsArray.filter(
+            (productId) => !existingProductIds.includes(productId)
+        );
+
+        const isValidToDelete = IDsArray.every((productId) =>
+            existingProductIds.includes(productId)
+        );
+
+        if (isValidToDelete) {
+            result = await Product.deleteMany({ _id: { $in: IDsArray } });
+            return result;
+        }
+        return {
+            deletedCount: 0,
+            message: `One or more products not found with the given IDs. No products deleted. Check IDs and try again.`,
+            missingProductIds,
+        };
+    } catch (error) {
+        next(error);
+    }
 };
