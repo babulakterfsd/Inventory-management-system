@@ -1,18 +1,25 @@
 /* eslint-disable no-underscore-dangle */
 const Product = require('../models/Product.model');
 
-module.exports.getAllProductsService = async () => {
-    // const products = await Product.where('name')
-    //     .equals('dal')
-    //     .where('price')
-    //     .gt(50)
-    //     .lt(100)
-    //     .select('name price unit quantity status -_id');
+module.exports.getAllProductsService = async (filters, queries) => {
+    /*
+    const products = await Product.where('name')
+        .equals('dal')
+        .where('price')
+        .gt(50)
+        .lt(100)
+        .select('name price unit quantity status -_id');
 
-    // const products = await Product.find({ name: { $regex: /mobile/i } }).select(
-    //     'name price unit quantity status -_id'
-    // );
-    const products = await Product.find().select('name price unit quantity _id status');
+    const products = await Product.find({ name: { $regex: /mobile/i } }).select(
+        'name price unit quantity status -_id'
+    );
+    */
+    /*
+    dhoren, sort er khetre price ar quantity deya holo. tahole konta diye sort hobe? jeta aage ache, seta diye sort hobe. kono 2 prodcut er price(jehetu eta ekhane aage) jodi same hoy, tkhn quantity diye sort hobe. ekhn ami client theke request korar somoy evabe korte parbo :
+    // http://localhost:5000/api/v1/products?price[lt]=5&sort=-quantity&fields=quantity,name,price,-_id  ; tahole amake je prodcut gular price 5 er kom ebong quantity shobcheye beshi segula aage rekhe, _id property baade, name, price, quantity property gulo dekhabe.
+    */
+
+    const products = await Product.find(filters).sort(queries.sortBy).select(queries.fields);
     return products;
 };
 

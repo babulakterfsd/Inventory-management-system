@@ -11,7 +11,30 @@ const {
 
 module.exports.getAllProducts = async (req, res, next) => {
     try {
-        const products = await getAllProductsService();
+        let filters = { ...req.query }; // copied the query object to a new object so that the original query object remains unchanged
+        const excludeFields = ['page', 'sort', 'limit', 'fields'];
+        excludeFields.forEach((field) => delete filters[field]); // deleted the fields from the copied object when someone tries to filter by those fields
+        const filterString = JSON.stringify(filters);
+        const filterStringWithDollarSign = filterString.replace(
+            /\b(gte|gt|lte|lt)\b/g,
+            (match) => `$${match}`
+        );
+        filters = JSON.parse(filterStringWithDollarSign);
+
+        console.log(filters);
+
+        const queries = {};
+
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            queries.sortBy = sortBy;
+        }
+        if (req.query.fields) {
+            const fields = req.query.fields.split(',').join(' ');
+            queries.fields = fields;
+        }
+
+        const products = await getAllProductsService(filters, queries);
 
         res.status(200).json({
             status: 'success',
