@@ -58,14 +58,32 @@ module.exports.deleteProductByIdService = async (productId) => {
     }
 };
 
-module.exports.bulkUpdateProductsService = async (data) => {
-    const products = [];
-    data.products.forEach((product) => {
-        products.push(
+module.exports.bulkUpdateProductsService = async (productsToBeUpdated) => {
+    const existingProducts = await Product.find({
+        _id: { $in: productsToBeUpdated.map((product) => product.id) },
+    });
+    const existingProductIds = existingProducts.map((product) => product._id.toString());
+    const missingProductIds = productsToBeUpdated
+        .filter((product) => !existingProductIds.includes(product.id))
+        .map((product) => product.id);
+
+    if (missingProductIds.length === 0) {
+        const updatePromises = productsToBeUpdated.map((product) =>
             Product.updateOne({ _id: product.id }, { $set: product.data }, { runValidators: true })
         );
-    });
-    await Promise.all(products);
+
+        const updateResults = await Promise.all(updatePromises);
+        const modifiedCount = updateResults.reduce((total, res) => total + res.nModified, 0);
+
+        return { modifiedCount, message: ` ${updatePromises.length} product updated successfully` };
+    }
+
+    return {
+        modifiedCount: 0,
+        message:
+            'One or more products not found with the given IDs. No products updated. Check IDs and try again.',
+        missingProductIds,
+    };
 };
 
 module.exports.bulkDeleteProductsService = async (IDsArray, next) => {
