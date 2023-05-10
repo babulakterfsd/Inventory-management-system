@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.route('/bulk-update').patch(ProductController.bulkUpdateProducts);
 router.route('/bulk-delete').delete(ProductController.bulkDeleteProducts);
+router.route('/delete-all-product').delete(ProductController.deleteAllproducts);
 
 router.route('/').get(ProductController.getAllProducts).post(ProductController.addANewProduct);
 

@@ -113,3 +113,8 @@ module.exports.bulkDeleteProductsService = async (IDsArray, next) => {
         next(error);
     }
 };
+
+module.exports.deleteAllproductsService = async () => {
+    const result = await Product.deleteMany({});
+    return result;
+};
