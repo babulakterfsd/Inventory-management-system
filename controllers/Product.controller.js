@@ -18,11 +18,7 @@ module.exports.getAllProducts = async (req, res, next) => {
             message: 'Products fetched successfully',
         });
     } catch (error) {
-        res.status(400).json({
-            status: 'fail',
-            message: 'Cannot get products',
-            errorDetails: error.message,
-        });
+        next(error);
     }
 };
 
