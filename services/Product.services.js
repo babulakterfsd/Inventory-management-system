@@ -19,8 +19,18 @@ module.exports.getAllProductsService = async (filters, queries) => {
     // http://localhost:5000/api/v1/products?price[lt]=5&sort=-quantity&fields=quantity,name,price,-_id  ; tahole amake je prodcut gular price 5 er kom ebong quantity shobcheye beshi segula aage rekhe, _id property baade, name, price, quantity property gulo dekhabe.
     */
 
-    const products = await Product.find(filters).sort(queries.sortBy).select(queries.fields);
-    return products;
+    const products = await Product.find(filters)
+        .skip(queries.skip)
+        .limit(queries.limit)
+        .sort(queries.sortBy)
+        .select(queries.fields);
+    const totalProduct = await Product.countDocuments(filters);
+    const pageCount = Math.ceil(totalProduct / queries.limit);
+    return {
+        products,
+        totalProduct,
+        pageCount,
+    };
 };
 
 module.exports.addANewProductService = async (data) => {

@@ -21,8 +21,6 @@ module.exports.getAllProducts = async (req, res, next) => {
         );
         filters = JSON.parse(filterStringWithDollarSign);
 
-        console.log(filters);
-
         const queries = {};
 
         if (req.query.sort) {
@@ -33,14 +31,33 @@ module.exports.getAllProducts = async (req, res, next) => {
             const fields = req.query.fields.split(',').join(' ');
             queries.fields = fields;
         }
+        if (req.query.page) {
+            const { page = 1, limit = 2 } = req.query;
+            const skip = (page - 1) * Number(limit);
+            queries.skip = skip;
+            queries.limit = Number(limit);
+        }
 
-        const products = await getAllProductsService(filters, queries);
+        const { products, totalProduct, pageCount } = await getAllProductsService(filters, queries);
 
-        res.status(200).json({
-            status: 'success',
-            data: products,
-            message: 'Products fetched successfully',
-        });
+        if (products.length > 0) {
+            res.status(200).json({
+                status: 'success',
+                data: products,
+                totalProduct,
+                pageCount,
+                message: 'Products fetched successfully',
+            });
+        }
+        if (products.length === 0) {
+            res.status(200).json({
+                status: 'success',
+                totalProduct,
+                pageCount,
+                message:
+                    'Request processed successfully but no products found. Check your query parameters and try again.',
+            });
+        }
     } catch (error) {
         next(error);
     }
