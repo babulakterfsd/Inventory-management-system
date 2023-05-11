@@ -25,31 +25,28 @@ const productSchema = mongoose.Schema(
                     'Product selling unit must be either kg, litre, bag or pcs, you entered {VALUE}',
             },
         },
-        imageUrls: [
-            {
-                type: String,
-                required: [true, 'Product image url is required'],
-                validate: {
-                    validator: (value) => {
-                        if (Array.isArray(value)) {
-                            return false;
-                        }
-                        let isValid = true;
-                        value.forEach((url) => {
-                            if (!validator.isURL(url)) {
-                                isValid = false;
-                            }
-                        });
-                        return isValid;
+        imageUrls: {
+            type: [
+                {
+                    type: String,
+                    required: true,
+                    validate: {
+                        validator: (value) => {
+                            return validator.isURL(value);
+                        },
+                        message: 'Please provide a valid image URL',
                     },
-                    message: 'Please provide valid image url',
                 },
-            },
-        ],
+            ],
+            required: [true, 'Product image URLs are required'],
+        },
         category: {
-            name: {
-                type: String,
-                required: [true, 'Product category name is required'],
+            type: String,
+            required: [true, 'Product category is required'],
+            enum: {
+                values: ['grocery', 'vegetable', 'fruit', 'meat', 'fish', 'other'],
+                message:
+                    'product category must be either grocery, vegetable, fruit, meat or fish, you entered {VALUE}',
             },
         },
         brand: {
@@ -65,6 +62,7 @@ const productSchema = mongoose.Schema(
         },
         supplier: {
             type: mongoose.Schema.Types.ObjectId,
+            required: [true, 'Product supplier is required'],
             ref: 'Supplier',
         },
     },
