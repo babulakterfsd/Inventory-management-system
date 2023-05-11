@@ -1,6 +1,6 @@
 [
   {
-    "name": "Apples",
+    "name": "apples",
     "description": "Fresh and juicy apples",
     "price": 2.99,
     "unit": "kg",
@@ -8,7 +8,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Milk",
+    "name": "milk",
     "description": "Organic cow's milk",
     "price": 1.99,
     "unit": "litre",
@@ -16,7 +16,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Bread",
+    "name": "bread",
     "description": "Whole wheat bread",
     "price": 2.49,
     "unit": "pcs",
@@ -24,7 +24,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Eggs",
+    "name": "eggs",
     "description": "Farm-fresh eggs",
     "price": 3.99,
     "unit": "pcs",
@@ -32,7 +32,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Bananas",
+    "name": "bananas",
     "description": "Ripe and yellow bananas",
     "price": 0.99,
     "unit": "kg",
@@ -40,7 +40,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Orange Juice",
+    "name": "orange juice",
     "description": "100% pure orange juice",
     "price": 4.99,
     "unit": "litre",
@@ -48,7 +48,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Cheese",
+    "name": "cheese",
     "description": "Cheddar cheese",
     "price": 5.49,
     "unit": "kg",
@@ -56,7 +56,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Tomatoes",
+    "name": "tomatoes",
     "description": "Fresh and ripe tomatoes",
     "price": 1.49,
     "unit": "kg",
@@ -64,7 +64,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Potatoes",
+    "name": "potatoes",
     "description": "Farm-fresh potatoes",
     "price": 0.79,
     "unit": "kg",
@@ -72,7 +72,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Cereal",
+    "name": "cereal",
     "description": "Healthy breakfast cereal",
     "price": 3.79,
     "unit": "pcs",
@@ -80,7 +80,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Chicken",
+    "name": "chicken",
     "description": "Boneless chicken breast",
     "price": 6.99,
     "unit": "kg",
@@ -88,7 +88,7 @@
     "status": "in-stock"
   },
   {
-    "name": "Lettuce",
+    "name": "lettuce",
     "description": "Fresh lettuce",
     "price": 1.29,
     "unit": "pcs",
