@@ -2,6 +2,8 @@ const {
     addANewBrandService,
     getAllBrandsService,
     getSpecificBrandByIdService,
+    updateBrandByIdService,
+    deleteBrandByIdService,
 } = require('../services/Brand.services');
 
 module.exports.getAllBrands = async (req, res, next) => {
@@ -79,6 +81,30 @@ module.exports.getSpecificBrandById = async (req, res, next) => {
             status: 'success',
             data: brand,
             message: 'Brand fetched successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.updateBrandById = async (req, res, next) => {
+    try {
+        await updateBrandByIdService(req.params.brandId, req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Brand updated successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.deleteBrandById = async (req, res, next) => {
+    try {
+        await deleteBrandByIdService(req.params.brandId);
+        res.status(200).json({
+            status: 'success',
+            message: 'Brand deleted successfully',
         });
     } catch (error) {
         next(error);

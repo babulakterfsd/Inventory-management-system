@@ -32,3 +32,27 @@ module.exports.getSpecificBrandByIdService = async (brandId) => {
         return brand;
     }
 };
+
+module.exports.updateBrandByIdService = async (brandId, data) => {
+    const brand = await Brand.findById(brandId);
+    if (!brand) {
+        throw new Error('No brand found with that ID');
+    } else {
+        await Brand.updateOne(
+            { _id: brandId },
+            { $set: data },
+            {
+                runValidators: true,
+            }
+        );
+    }
+};
+
+module.exports.deleteBrandByIdService = async (brandId) => {
+    const brand = await Brand.findById(brandId);
+    if (!brand) {
+        throw new Error('No brand found with that ID');
+    } else {
+        await Brand.deleteOne({ _id: brandId });
+    }
+};
