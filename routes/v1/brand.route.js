@@ -3,6 +3,10 @@ const BrandController = require('../../controllers/Brand.controller');
 
 const router = express.Router();
 
+router.route('/bulk-update').patch(BrandController.bulkUpdateBrands);
+router.route('/bulk-delete').delete(BrandController.bulkDeleteBrands);
+router.route('/delete-all-brand').delete(BrandController.deleteAllBrands);
+
 router.route('/').get(BrandController.getAllBrands).post(BrandController.addANewBrand);
 
 router

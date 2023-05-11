@@ -4,6 +4,9 @@ const {
     getSpecificBrandByIdService,
     updateBrandByIdService,
     deleteBrandByIdService,
+    bulkUpdateBrandsService,
+    bulkDeleteBrandsService,
+    deleteAllBrandsService,
 } = require('../services/Brand.services');
 
 module.exports.getAllBrands = async (req, res, next) => {
@@ -108,5 +111,62 @@ module.exports.deleteBrandById = async (req, res, next) => {
         });
     } catch (error) {
         next(error);
+    }
+};
+
+module.exports.bulkUpdateBrands = async (req, res, next) => {
+    try {
+        const result = await bulkUpdateBrandsService(req.body.brands);
+        if (result.modifiedCount === 0) {
+            res.status(400).json({
+                status: 'fail',
+                message: result.message,
+                missingIDs: result.missingBrandIds,
+            });
+        }
+        res.status(200).json({
+            status: 'success',
+            message: result.message,
+        });
+    } catch (error) {
+        // next(error); if I also call next(error), the error will be sent and  handled by the global error handler also. then that error function will also try to send an another response. Thus, It won't be a big problem, but will show an warning in the console that Cannot set headers after they are sent to the client. So, as i have handled the error programmatically, I don't need to call next(error) here.
+    }
+};
+
+module.exports.bulkDeleteBrands = async (req, res, next) => {
+    try {
+        const result = await bulkDeleteBrandsService(req.body.brandIDs, next);
+        if (result.deletedCount === 0) {
+            res.status(400).json({
+                status: 'fail',
+                message: result.message,
+                missingIDs: result.missingBrandIds,
+            });
+        } else {
+            res.status(200).json({
+                status: 'success',
+                message: `${result.deletedCount} brand deleted successfully`,
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.deleteAllBrands = async (req, res, next) => {
+    try {
+        const result = await deleteAllBrandsService();
+        if (result.deletedCount === 0) {
+            res.status(400).json({
+                status: 'fail',
+                message: 'No brands deleted, something went wrong',
+            });
+        }
+        res.status(200).json({
+            status: 'success',
+            message: 'All brands deleted successfully',
+        });
+    } catch (error) {
+        // next(error);
     }
 };
