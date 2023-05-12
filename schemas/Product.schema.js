@@ -75,31 +75,4 @@ const productSchema = mongoose.Schema(
 productSchema.methods.logger = function () {
     console.log(`${this.name}'s data saved to database `.gray.bold);
 };
-
-/* ----------------- Middlewares ------------------ */
-productSchema.pre('save', function (next) {
-    // ekhane save hocche kon method use kora hoise seta, amra jodi find dei ekhane tahole product get korar somoyi ekhane asbe. kintu ekhane find use korbo na, karon data save korar aage quantity check kore tar upor depend kore status set korbo. tai save use kora hoise. proyojon hole find use kora jabe. nicher post middleware eo same kahini
-    if (this.quantity < 1) {
-        this.status = 'out-of-stock';
-    }
-    console.log('pre save mongoose middleware'.grey.bold);
-    next();
-});
-
-productSchema.pre('updateOne', function (next) {
-    const update = this.getUpdate();
-    if (update.$set && update.$set.quantity < 1) {
-        update.$set.status = 'out-of-stock';
-    } else {
-        update.$set.status = 'in-stock';
-    }
-    console.log('pre updateOne mongoose middleware'.grey.bold);
-    next();
-});
-
-productSchema.post('save', function (doc, next) {
-    console.log('post save mongoose middleware'.grey.bold, doc);
-    next();
-});
-
 module.exports = productSchema;

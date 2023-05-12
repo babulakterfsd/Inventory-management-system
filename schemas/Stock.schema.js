@@ -30,27 +30,21 @@ const stockSchema = mongoose.Schema(
                     'Product selling unit must be either kg, litre, bag or pcs, you entered {VALUE}',
             },
         },
-        imageUrls: [
-            {
-                type: String,
-                required: [true, 'Product image url is required'],
-                validate: {
-                    validator: (value) => {
-                        if (Array.isArray(value)) {
-                            return false;
-                        }
-                        let isValid = true;
-                        value.forEach((url) => {
-                            if (!validator.isURL(url)) {
-                                isValid = false;
-                            }
-                        });
-                        return isValid;
+        imageUrls: {
+            type: [
+                {
+                    type: String,
+                    required: true,
+                    validate: {
+                        validator: (value) => {
+                            return validator.isURL(value);
+                        },
+                        message: 'Please provide a valid image URL',
                     },
-                    message: 'Please provide valid image url',
                 },
-            },
-        ],
+            ],
+            required: [true, 'Product image URLs are required'],
+        },
         price: {
             type: Number,
             required: [true, 'Product price is required'],
@@ -62,10 +56,8 @@ const stockSchema = mongoose.Schema(
             min: [0, 'Product quantity cannot be negative'],
         },
         category: {
-            name: {
-                type: String,
-                required: [true, 'Product category name is required'],
-            },
+            type: String,
+            required: [true, 'Product category is required'],
         },
         brand: {
             name: {
@@ -87,33 +79,35 @@ const stockSchema = mongoose.Schema(
                     "Product status must be either 'in-stock', 'out-of-stock' or 'discontinued'. You entered {VALUE}",
             },
         },
-        store: {
-            name: {
-                type: String,
-                required: [true, 'Store name is required'],
-                trim: true,
-                lowercase: true,
-                enum: {
-                    values: [
-                        'dhaka',
-                        'chittagong',
-                        'sylhet',
-                        'rajshahi',
-                        'khulna',
-                        'barishal',
-                        'rangpur',
-                        'mymensingh',
-                    ],
-                    message:
-                        '{VALUE} is not a valid store. It must be one of the following: dhaka, chittagong, sylhet, rajshahi, khulna, barishal, rangpur, mymensingh',
+        store: [
+            {
+                name: {
+                    type: String,
+                    required: [true, 'Store name is required'],
+                    trim: true,
+                    lowercase: true,
+                    enum: {
+                        values: [
+                            'dhaka',
+                            'chittagong',
+                            'sylhet',
+                            'rajshahi',
+                            'khulna',
+                            'barishal',
+                            'rangpur',
+                            'mymensingh',
+                        ],
+                        message:
+                            '{VALUE} is not a valid store. It must be one of the following: dhaka, chittagong, sylhet, rajshahi, khulna, barishal, rangpur, mymensingh',
+                    },
+                },
+                id: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    required: true,
+                    ref: 'Store',
                 },
             },
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
-                ref: 'Store',
-            },
-        },
+        ],
         suppliedBy: {
             name: {
                 type: String,
@@ -131,5 +125,30 @@ const stockSchema = mongoose.Schema(
         timestamps: true,
     }
 );
+/* ----------------- Middlewares ------------------ */
+stockSchema.pre('save', function (next) {
+    // ekhane save hocche kon method use kora hoise seta, amra jodi find dei ekhane tahole stock get korar somoyi ekhane asbe. kintu ekhane find use korbo na, karon data save korar aage quantity check kore tar upor depend kore status set korbo. tai save use kora hoise. proyojon hole find use kora jabe. nicher post middleware eo same kahini
+    if (this.quantity < 1) {
+        this.status = 'out-of-stock';
+    }
+    console.log('pre save mongoose middleware'.grey.bold);
+    next();
+});
+
+stockSchema.pre('updateOne', function (next) {
+    const update = this.getUpdate();
+    if (update.$set && update.$set.quantity < 1) {
+        update.$set.status = 'out-of-stock';
+    } else {
+        update.$set.status = 'in-stock';
+    }
+    console.log('pre updateOne mongoose middleware'.grey.bold);
+    next();
+});
+
+stockSchema.post('save', function (doc, next) {
+    console.log('post save mongoose middleware'.grey.bold, doc);
+    next();
+});
 
 module.exports = stockSchema;
