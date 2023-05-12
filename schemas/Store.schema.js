@@ -6,6 +6,7 @@ const storeSchema = mongoose.Schema(
             type: String,
             required: [true, 'Store name is required'],
             trim: true,
+            unique: [true, 'Product name must be unique'],
             lowercase: true,
             enum: {
                 values: [

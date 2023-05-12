@@ -10,6 +10,7 @@ const ProductRoute = require('./routes/v1/product.route');
 const BrandRoute = require('./routes/v1/brand.route');
 const SupplierRoute = require('./routes/v1/supplier.route');
 const CategoryRoute = require('./routes/v1/category.route');
+const StoreRoute = require('./routes/v1/store.route');
 
 const app = express();
 app.use(express.static(`${__dirname}/storage`)); // serving static files from server
@@ -25,6 +26,7 @@ app.use('/api/v1/products', ProductRoute);
 app.use('/api/v1/brands', BrandRoute);
 app.use('/api/v1/suppliers', SupplierRoute);
 app.use('/api/v1/categories', CategoryRoute);
+app.use('/api/v1/stores', StoreRoute);
 app.use('/', indexRoute);
 
 app.all('*', (req, res, next) => {
