@@ -9,6 +9,7 @@ const indexRoute = require('./routes/v1/index.route');
 const ProductRoute = require('./routes/v1/product.route');
 const BrandRoute = require('./routes/v1/brand.route');
 const SupplierRoute = require('./routes/v1/supplier.route');
+const CategoryRoute = require('./routes/v1/category.route');
 
 const app = express();
 app.use(express.static(`${__dirname}/storage`)); // serving static files from server
@@ -23,6 +24,7 @@ app.use(limiter); // limits api calls to 3 calls per minute, a third party middl
 app.use('/api/v1/products', ProductRoute);
 app.use('/api/v1/brands', BrandRoute);
 app.use('/api/v1/suppliers', SupplierRoute);
+app.use('/api/v1/categories', CategoryRoute);
 app.use('/', indexRoute);
 
 app.all('*', (req, res, next) => {
