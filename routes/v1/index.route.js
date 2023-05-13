@@ -2,6 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const indexController = require('../../controllers/index.controller');
+const uploader = require('../../middlewares/uploadHandler');
+
+router.route('/upload-single-file').post(uploader.single('image'), indexController.uploadFile);
 
 router
     .route('/')
@@ -16,6 +19,6 @@ router
  *
  * @apiError (Unauthorized 401)  Unauthorized  everyone can access the data
  * @apiError (Forbidden 403)     Forbidden     everyone can access the data
- */ .get(indexController.handleHomeRoute);
+ */ .get(indexController.getHomePage);
 
 module.exports = router;

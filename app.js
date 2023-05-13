@@ -29,7 +29,7 @@ app.use('/api/v1/suppliers', SupplierRoute);
 app.use('/api/v1/categories', CategoryRoute);
 app.use('/api/v1/stores', StoreRoute);
 app.use('/api/v1/stocks', StockRoute);
-app.use('/', indexRoute);
+app.use('/api/v1', indexRoute);
 
 app.all('*', (req, res, next) => {
     res.status(404).json({ error: 'API endpoint not found' });

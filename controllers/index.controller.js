@@ -1,4 +1,4 @@
-module.exports.handleHomeRoute = async (req, res, next) => {
+module.exports.getHomePage = async (req, res, next) => {
     try {
         res.render('home.ejs', {
             five: 5,
@@ -10,5 +10,16 @@ module.exports.handleHomeRoute = async (req, res, next) => {
         });
     } catch (error) {
         next(error); // This will be caught by the error handler middleware, this process is followed in production level code
+    }
+};
+
+module.exports.uploadFile = async (req, res, next) => {
+    try {
+        res.status(200).json({
+            message: 'File uploaded successfully',
+            file: req.file,
+        });
+    } catch (error) {
+        next(error);
     }
 };
