@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 module.exports.getHomePage = async (req, res, next) => {
     try {
         res.render('home.ejs', {
@@ -20,6 +23,19 @@ module.exports.uploadFile = async (req, res, next) => {
             // file: req.files,  for multiple file upload
             file: req.file,
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.getSingleFile = async (req, res, next) => {
+    try {
+        const file = path.join(
+            __dirname,
+            '../storage/images/1683979748020_103245821_funny developer.gif'
+        );
+        const readStream = fs.createReadStream(file);
+        readStream.pipe(res);
     } catch (error) {
         next(error);
     }
