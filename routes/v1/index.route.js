@@ -4,6 +4,7 @@ const router = express.Router();
 const indexController = require('../../controllers/index.controller');
 const uploader = require('../../middlewares/uploadHandler');
 
+// router.route('/upload-single-file').post(uploader.array('image'), indexController.uploadFile); //for multiple file upload
 router.route('/upload-single-file').post(uploader.single('image'), indexController.uploadFile);
 
 router
