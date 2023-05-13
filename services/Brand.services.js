@@ -24,9 +24,11 @@ module.exports.addANewBrandService = async (data) => {
 };
 
 module.exports.getSpecificBrandByIdService = async (brandId) => {
-    const brand = await Brand.findById(brandId).select(
-        '-products -__v -suppliers -createdAt -updatedAt -_id'
-    );
+    const brand = await Brand.findById(brandId).populate({
+        path: 'products',
+        select: 'name -_id',
+    });
+    // populate kora maane hocche brand er products er moddhe products er details gula include kora. jemon, brand er products er moddhe 5 ta product ache. populate korle, brand er products er moddhe 5 ta product er details gula sompurno pathiye dibe. sudhu id gula, prottekta product er details dibe
     if (!brand) {
         throw new Error('No brand found with that ID');
     } else {

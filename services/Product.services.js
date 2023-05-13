@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const Product = require('../models/Product.model');
+const Brand = require('../models/Brand.model');
 
 module.exports.getAllProductsService = async (filters, queries) => {
     /*
@@ -37,6 +38,8 @@ module.exports.addANewProductService = async (data) => {
     const product = new Product(data);
     const savedProduct = await product.save();
     savedProduct.logger();
+    const { _id: productId, brand } = savedProduct;
+    await Brand.updateOne({ _id: brand.id }, { $push: { products: productId } });
     return savedProduct;
 };
 
