@@ -30,3 +30,27 @@ module.exports.getSpecificSupplierByIdService = async (supplierId) => {
         return supplier;
     }
 };
+
+module.exports.updateSupplierByIdService = async (supplierId, data) => {
+    const supplier = await Supplier.findById(supplierId);
+    if (!supplier) {
+        throw new Error('No supplier found with that ID');
+    } else {
+        await Supplier.updateOne(
+            { _id: supplierId },
+            { $set: data },
+            {
+                runValidators: true,
+            }
+        );
+    }
+};
+
+module.exports.deleteSupplierByIdService = async (supplierId) => {
+    const supplier = await Supplier.findById(supplierId);
+    if (!supplier) {
+        throw new Error('No supplier found with that ID');
+    } else {
+        await Supplier.deleteOne({ _id: supplierId });
+    }
+};

@@ -2,6 +2,8 @@ const {
     getAllSuppliersService,
     addANewSupplierService,
     getSpecificSupplierByIdService,
+    updateSupplierByIdService,
+    deleteSupplierByIdService,
 } = require('../services/Supplier.services');
 
 module.exports.getAllSuppliers = async (req, res, next) => {
@@ -82,6 +84,30 @@ module.exports.getSpecificSupplierById = async (req, res, next) => {
             status: 'success',
             data: supplier,
             message: 'Supplier fetched successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.updateSupplierById = async (req, res, next) => {
+    try {
+        await updateSupplierByIdService(req.params.supplierId, req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Supplier updated successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.deleteSupplierById = async (req, res, next) => {
+    try {
+        await deleteSupplierByIdService(req.params.supplierId);
+        res.status(200).json({
+            status: 'success',
+            message: 'Supplier deleted successfully',
         });
     } catch (error) {
         next(error);

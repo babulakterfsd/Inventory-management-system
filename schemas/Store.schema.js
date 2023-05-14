@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
 
+const { ObjectId } = mongoose.Schema.Types;
+
+// shob store e store manager id emni ekta deya ache apatoto, user create kore then real id ta dite hobe
+
 const storeSchema = mongoose.Schema(
     {
+        products: [
+            {
+                type: ObjectId,
+                ref: 'Product',
+            },
+        ],
         name: {
             type: String,
             required: [true, 'Store name is required'],
@@ -30,12 +40,9 @@ const storeSchema = mongoose.Schema(
             default: 'active',
         },
         manager: {
-            name: String,
-            contactNumber: String,
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-            },
+            type: ObjectId,
+            required: true,
+            ref: 'User',
         },
     },
     {

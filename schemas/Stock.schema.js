@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const { ObjectId } = mongoose.Schema.Types;
+
 const stockSchema = mongoose.Schema(
     {
         productId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: ObjectId,
             required: true,
             ref: 'Product',
         },
@@ -25,26 +27,18 @@ const stockSchema = mongoose.Schema(
             type: String,
             required: [true, 'Product selling unit is required'],
             enum: {
-                values: ['kg', 'litre', 'pcs', 'bag'],
+                values: ['kg', 'litre', 'pcs'],
                 message:
-                    'Product selling unit must be either kg, litre, bag or pcs, you entered {VALUE}',
+                    'Product selling unit must be either kg, litre or pcs, you entered {VALUE}',
             },
         },
-        imageUrls: {
-            type: [
-                {
-                    type: String,
-                    required: true,
-                    validate: {
-                        validator: (value) => {
-                            return validator.isURL(value);
-                        },
-                        message: 'Please provide a valid image URL',
-                    },
-                },
-            ],
-            required: [true, 'Product image URLs are required'],
-        },
+        imageURLs: [
+            {
+                type: String,
+                required: true,
+                validate: [validator.isURL, 'Please provide valid url(s)'],
+            },
+        ],
         price: {
             type: Number,
             required: [true, 'Product price is required'],
@@ -58,6 +52,11 @@ const stockSchema = mongoose.Schema(
         category: {
             type: String,
             required: [true, 'Product category is required'],
+            enum: {
+                values: ['grocery', 'food', 'sports', 'other'],
+                message:
+                    'product category must be either grocery, food, sports or other, you entered {VALUE}',
+            },
         },
         brand: {
             name: {
@@ -65,7 +64,7 @@ const stockSchema = mongoose.Schema(
                 required: [true, 'Product brand name is required'],
             },
             id: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: 'Brand',
                 required: true,
             },
@@ -102,23 +101,22 @@ const stockSchema = mongoose.Schema(
                     },
                 },
                 id: {
-                    type: mongoose.Schema.Types.ObjectId,
+                    type: ObjectId,
                     required: true,
                     ref: 'Store',
                 },
             },
         ],
         suppliedBy: {
-            name: {
-                type: String,
-                trim: true,
-                required: [true, 'Supplier name is required'],
-            },
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
-                ref: 'Supplier',
-            },
+            type: ObjectId,
+            required: true,
+            ref: 'Supplier',
+        },
+        sellCount: {
+            type: Number,
+            default: 0,
+            min: [0, 'Sell count cannot be negative'],
+            required: true,
         },
     },
     {

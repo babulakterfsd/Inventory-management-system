@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const { ObjectId } = mongoose.Schema.Types;
+
+// fresh group 64608586278b97288824e541, aci group 64608646278b97288824e547, tir group 646086cb278b97288824e54d, bashundhara group 6460878b278b97288824e562, rfl group 64608830278b97288824e56a
+
 const brandSchema = mongoose.Schema(
     {
+        products: [
+            {
+                type: ObjectId,
+                ref: 'Product',
+                required: true,
+            },
+        ],
         name: {
             type: String,
-            required: [true, 'Brand name is required'],
             trim: true,
-            maxLength: [50, 'Brand name must be at most 50 characters long'],
-            unique: [true, 'Brand name must be unique'],
+            required: [true, 'Please provide a brand name'],
+            maxLength: 100,
+            unique: [true, 'Brand name already exists'],
             lowercase: true,
         },
         description: String,
@@ -19,23 +30,14 @@ const brandSchema = mongoose.Schema(
         },
         website: {
             type: String,
-            validate: [validator.isURL, 'Please provide a valid URL'],
+            validate: [validator.isURL, 'Please provide a valid url'],
         },
         location: String,
-        products: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Product',
-            },
-        ],
+
         suppliers: [
             {
-                name: String,
-                contactNumber: String,
-                id: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Supplier',
-                },
+                type: ObjectId,
+                ref: 'Supplier',
             },
         ],
         status: {
