@@ -18,3 +18,5 @@
 - @apiError (Unauthorized 401) Unauthorized everyone can access the data
 - @apiError (Forbidden 403) Forbidden everyone can access the data
   \*/
+
+- kivabe signup/password reset egula khetre mail send korte hoy, ta implement kora hoy nai. future project e dorkar hole 10.7 / 10.8 theke dekhe niye mailgun ba google ba onno kono package diye mail sending ta kore fela jabe in sha allah.
