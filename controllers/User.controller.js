@@ -1,19 +1,77 @@
 /* eslint-disable no-underscore-dangle */
-const { signupService, loginService } = require('../services/User.services');
+const bcrypt = require('bcryptjs');
+const {
+    signupService,
+    loginService,
+    findUserByTokenService,
+} = require('../services/User.services');
+const { sendMailWithGmail } = require('../utils/sendEmail');
 const { generateToken } = require('../utils/token');
 
 module.exports.signup = async (req, res, next) => {
     try {
         const user = await signupService(req.body);
+
+        const token = user.generateConfirmationToken();
+
+        await user.save({ validateBeforeSave: false }); // save korar karon hocche, prothom line e to user create hoyei gelo. kintu db te confirmation token ta rakhtesi ami generateConfirmationToken method er maddhome.tai db te jaate confirmationtoken ar setar expire date save hoy, shei jonno user.save() call kora lagche abar
+
+        const mailData = {
+            to: [user.email],
+            subject: 'Verify your Account',
+            text: `Thank you for creating your account. Please confirm your account here: ${
+                req.protocol
+            }://${req.get('host')}${req.originalUrl}/confirmation/${token}`,
+        };
+
+        await sendMailWithGmail(mailData);
+
         if (!user) {
-            throw new Error('User not created');
+            throw new Error('Signup failed');
         } else {
             res.status(201).json({
                 status: 'success',
                 data: user,
-                message: 'Signup successful',
+                message: 'Signup successful. Please verify your email to activate your account',
             });
         }
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.confirmEmail = async (req, res, next) => {
+    try {
+        const { token } = req.params;
+
+        const user = await findUserByTokenService(token);
+
+        if (!user) {
+            return res.status(403).json({
+                status: 'fail',
+                error: 'Invalid token',
+            });
+        }
+
+        const expired = new Date() > new Date(user.confirmationTokenExpires);
+
+        if (expired) {
+            return res.status(401).json({
+                status: 'fail',
+                error: 'Token expired',
+            });
+        }
+
+        user.status = 'active';
+        user.confirmationToken = undefined;
+        user.confirmationTokenExpires = undefined;
+
+        user.save({ validateBeforeSave: false }); // after editing user, we need to save it
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully activated your account.',
+        });
     } catch (error) {
         next(error);
     }
