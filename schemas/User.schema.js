@@ -86,6 +86,11 @@ const userSchema = mongoose.Schema(
 /* ----------------- Middlewares ------------------ */
 
 userSchema.pre('save', function (next) {
+    if (!this.isModified('password')) {
+        //  only run if password is modified, otherwise it will change every time we save the user!
+        return next();
+    }
+
     const { password } = this;
 
     const hashedPassword = bcrypt.hashSync(password);
