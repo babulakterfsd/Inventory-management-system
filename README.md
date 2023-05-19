@@ -13,7 +13,7 @@
 -
 - @apiHeader {String} Authorization nothing needed so far cause authentication is not implemented yet
 
-- @apiSuccess [{}] -> an array of products
+- @apiSuccess [{}] -> an array of products.
 -
 - @apiError (Unauthorized 401) Unauthorized everyone can access the data
 - @apiError (Forbidden 403) Forbidden everyone can access the data
